@@ -1,0 +1,19 @@
+<svg viewBox="0 0 16 16" fill="none" class={$$props.class}>
+	<path
+		d="M12 4.666666666666666v6.666666666666666"
+		stroke="currentColor"
+		stroke-width="1"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	>
+	</path>
+	<path
+		d="M4.64786 3.5114666666666663C4.3855466666666665 3.30438 4 3.491213333333333 4 3.82542V12.1746c0 0.33419999999999994 0.3855466666666666 0.5209999999999999 0.64786 0.3139333333333333l5.2878066666666665 -4.1746c0.20286666666666667 -0.16013333333333332 0.20286666666666667 -0.46773333333333333 0 -0.6278666666666666L4.64786 3.5114666666666663Z"
+		fill="currentColor"
+		stroke="currentColor"
+		stroke-width="1"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	>
+	</path>
+</svg>
