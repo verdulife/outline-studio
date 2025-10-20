@@ -9,11 +9,13 @@
 </script>
 
 <section class={$$props.class}>
-	<TimelineHeader {duration} />
+	<div class="border-r border-neutral-200/10">
+		<TimelineHeader {duration} />
 
-	<div class="flex h-full flex-col border-r border-neutral-200/10">
-		{#each $entries as entry}
-			<EntryCard {entry} />
-		{/each}
+		<div class="flex h-full flex-col">
+			{#each $entries as entry}
+				<EntryCard {entry} />
+			{/each}
+		</div>
 	</div>
 </section>

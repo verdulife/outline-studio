@@ -6,7 +6,10 @@
 </script>
 
 <article class="flex flex-col items-start border-b border-neutral-200/10 p-4">
-	<span class="text-xl text-neutral-400">{duration}</span>
-	<p class="text-2xl">{title}</p>
-	<OwnerLabel>{owner}</OwnerLabel>
+	<p class="text-lg">{title}</p>
+
+	<div class="flex w-full items-end justify-between">
+		<span class="text-2xl text-neutral-400">{duration}</span>
+		<OwnerLabel>{owner}</OwnerLabel>
+	</div>
 </article>
