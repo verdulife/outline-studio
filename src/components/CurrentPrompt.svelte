@@ -1,14 +1,17 @@
 <script>
 	import PromptTimer from '@/components/PromptTimer.svelte';
+	import OwnerLabel from '@/components/OwnerLabel.svelte';
+	
+	import { entries, globalState } from '@/lib/stores';
 
-	export let entry;
-	const { duration, title, owner } = entry;
+	$: entry = $entries[$globalState.currentEntry];
 </script>
 
-<article class="flex flex-1 flex-col border-b border-neutral-200/10 p-4">
-	<div class="flex flex-1 items-center">
-		<p class="text-7xl">{title}</p>
+<article class="flex flex-1 flex-col rounded-md border-b border-neutral-200/10 bg-neutral-950 p-4">
+	<div class="flex flex-1 flex-col items-start gap-2">
+		<OwnerLabel>{entry.owner}</OwnerLabel>
+		<p class="text-6xl text-neutral-400">{entry.title}</p>
 	</div>
 
-	<PromptTimer />
+	<PromptTimer {entry} class="text-[10ch]" />
 </article>

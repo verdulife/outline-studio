@@ -5,63 +5,74 @@
 	import Play from '@/lib/assets/Play.svelte';
 	import ProgressBar from '@/components/ProgressBar.svelte';
 
-	import { calculateTotalDuration, secondsToString } from '@/lib/utils';
-	import { entries } from '@/lib/stores';
-	import { state } from '@/lib/stores';
+	import { globalState, entries } from '@/lib/stores';
+	import { secondsToString } from '@/lib/utils';
 
-	let interval: ReturnType<typeof setInterval>;
-
-	$: currentTime = secondsToString($state.timer);
-	$: totalTime = calculateTotalDuration($entries);
+	$: isFirst = $globalState.currentEntry === 0;
+	$: isLast = $globalState.currentEntry + 1 >= $entries.length;
 
 	function togglePlay() {
-		$state.isPlaying = !$state.isPlaying;
+		$globalState.isPlaying = !$globalState.isPlaying;
 
-		if (!$state.isPlaying) {
-			clearInterval(interval);
-		} else {
-			interval = setInterval(() => {
-				state.update((s) => ({ ...s, timer: s.timer + 1 }));
-			}, 1000);
-		}
-	}
-
-	function next() {
-		state.update((s) => ({ ...s, currentEntry: s.currentEntry + 1 }));
+		const interval = setInterval(() => {
+			if ($globalState.isPlaying) {
+				$globalState.timer += 1;
+			} else {
+				clearInterval(interval);
+			}
+		}, 1000);
 	}
 
 	function previous() {
-		state.update((s) => ({ ...s, currentEntry: Math.max(0, s.currentEntry - 1) }));
+		$globalState.currentEntry -= 1;
+	}
+
+	function next() {
+		$globalState.currentEntry += 1;
 	}
 
 	function reset() {
 		const check = confirm('¿Estás seguro de que quieres reiniciar?');
 		if (!check) return;
 
-		state.set({ isPlaying: false, currentEntry: 0, timer: 0 });
+		$globalState.isPlaying = false;
+		$globalState.currentEntry = 0;
+		$globalState.timer = 0;
 	}
 </script>
 
 <section class={$$props.class}>
-	<div class="flex flex-1 items-center gap-2 px-4">
-		<Button click={next}><Next class="size-5 rotate-180" /></Button>
+	<div class="grid w-full grid-cols-[auto_1fr_auto] bg-neutral-200/10">
+		<div class="flex items-center gap-2 rounded-md bg-neutral-950 p-4">
+			<Button click={previous} disabled={isFirst}><Next class="size-5 rotate-180" /></Button>
 
-		<Button click={togglePlay}>
-			{#if $state.isPlaying}
-				<Pause class="size-5" />
-			{:else}
-				<Play class="size-5" />
-			{/if}
-		</Button>
+			<Button click={togglePlay}>
+				{#if $globalState.isPlaying}
+					<Pause class="size-5" />
+				{:else}
+					<Play class="size-5" />
+				{/if}
+			</Button>
 
-		<Button click={next}><Next class="size-5" /></Button>
-
-		<div class="mx-2 flex flex-1 grow items-center gap-4 border-x border-neutral-200/10 p-4">
-			<time class="text-neutral-500" datetime={currentTime}>{currentTime}</time>
-			<ProgressBar {currentTime} {totalTime} />
-			<time class="text-neutral-500" datetime={totalTime}>{totalTime}</time>
+			<Button click={next} disabled={isLast}><Next class="size-5" /></Button>
 		</div>
 
-		<Button click={reset}>Reiniciar</Button>
+		<div
+			class="flex flex-1 grow items-center gap-4 rounded-md border-x border-neutral-200/10 bg-neutral-950 p-4"
+		>
+			<time class="text-neutral-500" datetime={secondsToString($globalState.timer)}>
+				{secondsToString($globalState.timer)}
+			</time>
+
+			<ProgressBar />
+
+			<time class="text-neutral-500" datetime={secondsToString($globalState.duration)}>
+				{secondsToString($globalState.duration)}
+			</time>
+		</div>
+
+		<div class="flex items-center rounded-md bg-neutral-950 p-4">
+			<Button click={reset}>Reiniciar</Button>
+		</div>
 	</div>
 </section>
